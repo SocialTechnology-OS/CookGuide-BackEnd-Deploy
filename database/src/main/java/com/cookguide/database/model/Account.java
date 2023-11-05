@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -37,10 +38,24 @@ public class Account {
     private boolean userType;
 
     @Column(name = "birthday", nullable = false)
-    private LocalDateTime birthday;
+    private LocalDate birthday;
+
+    @Column(name = "phone", nullable = false)
+    private String phone;
 
     @Column(name = "DNI", nullable= false)
     private int DNI;
+
+    @Column(name = "gender", nullable = false)
+    private String gender;
+
+    @Column(name = "diet", nullable = false)
+    private String diet;
+
+    @Column(name = "picture", nullable = false)
+    private String picture;
+
+
     /*
     @OneToOne
     @JoinColumn(name = "healthId", nullable = false
