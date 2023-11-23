@@ -11,25 +11,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Entity
-@Table(name = "recipes")
-public class Recipes {
+@Table (name = "ingredients")
+public class Ingredients {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int uid;
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
-
-    @Column(name = "image", nullable = false)
-    private String image;
-
-    @Column (name = "preparation", nullable = false)
-    private String preparation;
-
-    @Column (name = "time", nullable = false)
-    private String time;
-
-    @Column (name = "servings", nullable = false)
-    private String servings;
-
 }

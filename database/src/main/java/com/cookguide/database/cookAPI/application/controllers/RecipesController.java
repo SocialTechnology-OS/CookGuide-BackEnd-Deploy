@@ -1,90 +1,54 @@
 package com.cookguide.database.cookAPI.application.controllers;
 
-import com.cookguide.database.shared.exception.ValidationException;
-import com.cookguide.database.cookAPI.domain.entities.Recipes;
-import com.cookguide.database.cookAPI.infraestructure.repositories.RecipesRepository;
+import com.cookguide.database.cookAPI.application.dto.request.RecipesRequestDTO;
+import com.cookguide.database.cookAPI.application.dto.response.RecipesResponseDTO;
 import com.cookguide.database.cookAPI.application.services.RecipesService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cookguide.database.shared.model.dto.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Recipes", description = "Recipes API")
 @RestController
-@RequestMapping("/api/cookguide/v1")
+@RequestMapping("/api/v1/cookguide")
 public class RecipesController {
 
-    @Autowired
-    private RecipesService recipesService;
+    private final RecipesService recipesService;
 
-    private final RecipesRepository recipesRepository;
-
-    public RecipesController(RecipesRepository recipesRepository) {
-        this.recipesRepository = recipesRepository;
+    public RecipesController(RecipesService recipesService) {
+        this.recipesService = recipesService;
     }
 
-    @Transactional(readOnly = true)
+    @Operation(summary = "Get all recipes")
     @GetMapping("/recipes")
-    public ResponseEntity<List<Recipes>> getAllRecipes(){
-        return new ResponseEntity<List<Recipes>>(recipesService.getAllRecipes(), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<List<RecipesResponseDTO>>> getAllRecipes() {
+        var res = recipesService.getAllRecipes();
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-    @Transactional
+    @Operation(summary = "Create a new recipe")
     @PostMapping("/recipes")
-    public ResponseEntity<Recipes> createRecipes(@RequestBody Recipes recipes){
-        validateRecipes(recipes);
-        return new ResponseEntity<Recipes>(recipesService.createRecipes(recipes), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<RecipesResponseDTO>> createRecipes(@RequestBody RecipesRequestDTO recipesRequestDTO){
+        var res = recipesService.createRecipes(recipesRequestDTO);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
+    @Operation(summary = "Update an existing recipe")
     @PutMapping("/recipes/{id}")
-    public ResponseEntity<Recipes> updateRecipes(@RequestBody Recipes recipes){
-        return new ResponseEntity<Recipes>(recipesService.updateRecipes(recipes), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<RecipesResponseDTO>> updateRecipes(@PathVariable int id, @RequestBody RecipesRequestDTO recipesRequestDTO) {
+        var res = recipesService.updateRecipes(id, recipesRequestDTO);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @Operation(summary = "Delete a recipe")
     @DeleteMapping("/recipes/{id}")
-    public ResponseEntity<Void> deleteRecipes(@PathVariable int id){
-        recipesService.deleteRecipes(id);
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-    }
-
-    private void validateRecipes(Recipes recipes){
-
-        if(recipes.getServings() == null || recipes.getServings().isEmpty()){
-            throw new ValidationException("El numero de porciones es obligatorio");
-        }
-
-        if(recipes.getPreparation() == null || recipes.getPreparation().isEmpty()){
-            throw new ValidationException("La descripcion de la receta debe ser obligatoria");
-        }
-
-        if (recipes.getName() == null || recipes.getName().isEmpty()){
-            throw new ValidationException("El nombre de la receta es obligatorio");
-        }
-
-        if (recipes.getPreparation() == null || recipes.getPreparation().isEmpty()){
-            throw new ValidationException("La preparacion de la receta es obligatoria");
-        }
-
-        if (Integer.parseInt(recipes.getServings()) < 0){
-            throw new ValidationException("El numero de porciones debe ser mayor a 0");
-        }
-
-        if(recipes.getIngredients() == null || recipes.getIngredients().isEmpty()){
-            throw new ValidationException("La lista de ingredientes es obligatoria");
-        }
-
-        if (Integer.parseInt(recipes.getTime()) < 0){
-            throw new ValidationException("El tiempo de preparacion debe ser mayor a 0");
-        }
-
-    }
-
-    private void existRecipesByName(Recipes recipes){
-        if(recipesRepository.existsById(recipes.getUid())){
-            throw new ValidationException("Ya existe una receta con ese nombre");
-        }
+    public ResponseEntity<ApiResponse<Void>> deleteRecipes(@PathVariable int id) {
+        var res = recipesService.deleteRecipes(id);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
 }

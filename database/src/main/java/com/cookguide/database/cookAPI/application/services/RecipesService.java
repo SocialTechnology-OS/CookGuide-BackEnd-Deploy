@@ -1,17 +1,18 @@
 package com.cookguide.database.cookAPI.application.services;
 
-import com.cookguide.database.cookAPI.domain.entities.Recipes;
+import com.cookguide.database.cookAPI.application.dto.request.RecipesRequestDTO;
+import com.cookguide.database.cookAPI.application.dto.response.RecipesResponseDTO;
+import com.cookguide.database.shared.model.dto.response.ApiResponse;
 
 import java.util.List;
 
 public interface RecipesService {
-    public Recipes createRecipes(Recipes recipes);
 
-    Recipes updateRecipes(Recipes recipes);
+    ApiResponse<List<RecipesResponseDTO>> getAllRecipes();
 
-    List<Recipes> getAllRecipes();
+    ApiResponse<RecipesResponseDTO> createRecipes(RecipesRequestDTO recipesRequestDTO);
 
-    void deleteRecipes(int id);
+    ApiResponse<RecipesResponseDTO> updateRecipes(int id, RecipesRequestDTO recipesRequestDTO);
 
-    boolean isRecipesExist(int id);
+    ApiResponse<Void> deleteRecipes(int id);
 }
