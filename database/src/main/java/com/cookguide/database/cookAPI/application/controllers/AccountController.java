@@ -28,13 +28,13 @@ public class AccountController {
         return ResponseEntity.ok(savedAccount);
     }
     @GetMapping("/accounts/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable Long id) {
+    public ResponseEntity<Account> getAccountById(@PathVariable int id) {
         Optional<Account> account = accountRepository.findById(id);
         return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/accounts/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAccount(@PathVariable int id) {
         if (accountRepository.existsById(id)) {
             accountRepository.deleteById(id);
             return ResponseEntity.noContent().build();
@@ -43,7 +43,7 @@ public class AccountController {
         }
     }
     @PutMapping("/accounts/{id}")
-    public ResponseEntity<Account> updateAccount(@PathVariable Long id, @RequestBody Account updatedAccount) {
+    public ResponseEntity<Account> updateAccount(@PathVariable int id, @RequestBody Account updatedAccount) {
         Optional<Account> existingAccount = accountRepository.findById(id);
         if (existingAccount.isPresent()) {
             // Cambio de Nombres, Dieta, Fecha de Cumpleaños y Numero

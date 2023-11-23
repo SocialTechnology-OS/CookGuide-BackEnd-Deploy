@@ -16,7 +16,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account createAccount(Account account){
-        return accountRepository.save(account);
+        return null;
     }
     @Override
     public  Account updateAccount(Account account){
@@ -24,19 +24,19 @@ public class AccountServiceImpl implements AccountService {
     }
     @Override
     public  Account getAccountById(Long id){
-        return accountRepository.findById(id).get();
+        return null;
     }
     @Override
     public List<Account> getAllAccounts(){
-        return (List<Account>) accountRepository.findAll();
+        return null;
     }
     @Override
     public  void deleteAccount(Long id){
-        accountRepository.deleteById(id);
+
     }
     @Override
     public  boolean isAccountExist(Long id){
-        return accountRepository.existsById(id);
+        return false;
     }
 
 }

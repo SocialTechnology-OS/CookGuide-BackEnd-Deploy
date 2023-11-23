@@ -20,4 +20,6 @@ public class Ingredients {
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
+
+
 }

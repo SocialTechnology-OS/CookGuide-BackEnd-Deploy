@@ -39,10 +39,10 @@ public class RecipesServiceImpl implements RecipesService {
     @Override
     public ApiResponse<RecipesResponseDTO> createRecipes(RecipesRequestDTO recipesRequestDTO) {
         validateUniqueRecipes(recipesRequestDTO);
-        var sportEvent = modelMapper.map(recipesRequestDTO, Recipes.class);
-        recipesRepository.save(sportEvent);
+        var recipe = modelMapper.map(recipesRequestDTO, Recipes.class);
+        recipesRepository.save(recipe);
 
-        var response = modelMapper.map(sportEvent, RecipesResponseDTO.class);
+        var response = modelMapper.map(recipe, RecipesResponseDTO.class);
 
         return new ApiResponse<>("Sport event created successfully", Estatus.SUCCESS, response);
     }
@@ -72,7 +72,7 @@ public class RecipesServiceImpl implements RecipesService {
     }
 
     void validateUniqueRecipes(RecipesRequestDTO recipesRequestDTO) {
-        boolean exists = recipesRepository.existsByNameAndPreparationAndAndServingsAndTime(
+        boolean exists = recipesRepository.existsByNameAndPreparationAndServingsAndTime(
                 recipesRequestDTO.getName(),
                 recipesRequestDTO.getPreparation(),
                 recipesRequestDTO.getServings(),
