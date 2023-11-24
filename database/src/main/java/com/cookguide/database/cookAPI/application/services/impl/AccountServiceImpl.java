@@ -5,12 +5,15 @@ import com.cookguide.database.cookAPI.application.dto.response.AccountResponseDT
 import com.cookguide.database.cookAPI.application.services.AccountService;
 import com.cookguide.database.cookAPI.domain.entities.Account;
 import com.cookguide.database.cookAPI.infraestructure.repositories.AccountRepository;
+import com.cookguide.database.shared.exception.ValidationException;
 import com.cookguide.database.shared.model.dto.response.ApiResponse;
 import com.cookguide.database.shared.model.enums.Estatus;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,6 +41,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public ApiResponse<AccountResponseDTO> createAccount(AccountRequestDTO accountRequestDTO) {
+        validateEmail(accountRequestDTO.getEmail());
+        validateDNI(accountRequestDTO.getDNI());
+        validateAge(accountRequestDTO.getBirthday());
+        validatePassword(accountRequestDTO.getPassword());
+        validatePhoneNumber(accountRequestDTO.getPhone());
+
         var account = modelMapper.map(accountRequestDTO, Account.class);
         accountRepository.save(account);
 
@@ -68,6 +77,64 @@ public class AccountServiceImpl implements AccountService {
         } else {
             return new ApiResponse<>("Account not found", Estatus.ERROR, null);
         }
+    }
+
+    private void validateEmail(String email) {
+        if (!isEmailUnique(email)) {
+            throw new ValidationException("Email is already in use");
+        }
+    }
+
+    private void validateDNI(Long dni) {
+        if (!isDniUnique(dni)) {
+            throw new ValidationException("DNI must be unique");
+        }
+    }
+
+    private void validateAge(LocalDate birthday) {
+        if (!isAdult(birthday)) {
+            throw new ValidationException("User must be at least 18 years old");
+        }
+    }
+
+    private void validatePassword(String password) {
+        if (!isPasswordStrong(password)) {
+            throw new ValidationException("Password does not meet the strength requirements");
+        }
+    }
+
+    private void validatePhoneNumber(String phone) {
+        if (!isPhoneNumberValid(phone)) {
+            throw new ValidationException("Phone number is invalid");
+        }
+    }
+
+    @Override
+    public boolean isDniUnique(Long dni) {
+        return !accountRepository.existsByDNI(dni);
+    }
+
+    @Override
+    public boolean isEmailUnique(String email) {
+        return !accountRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean isAdult(LocalDate birthday) {
+        return Period.between(birthday, LocalDate.now()).getYears() >= 18;
+    }
+
+    @Override
+    public boolean isPasswordStrong(String password) {
+        String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
+        return password.matches(passwordRegex);
+    }
+
+    @Override
+    public boolean isPhoneNumberValid(String phone) {
+        // This is a very basic example and will vary greatly depending on country and format
+        String phoneRegex = "^\\+(?:[0-9] ?){6,14}[0-9]$";
+        return phone.matches(phoneRegex);
     }
 
 }
