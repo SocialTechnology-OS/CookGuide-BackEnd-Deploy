@@ -1,14 +1,19 @@
 package com.cookguide.database.cookAPI.application.services.impl;
 
 import com.cookguide.database.cookAPI.application.dto.request.RecipesRequestDTO;
+import com.cookguide.database.cookAPI.application.dto.response.RecipeIngredientDetailDTO;
 import com.cookguide.database.cookAPI.application.dto.response.RecipesResponseDTO;
 import com.cookguide.database.cookAPI.application.services.RecipesService;
+import com.cookguide.database.cookAPI.domain.entities.RecipeIngredients;
 import com.cookguide.database.cookAPI.domain.entities.Recipes;
+import com.cookguide.database.cookAPI.infraestructure.repositories.RecipeIngredientsRepository;
 import com.cookguide.database.cookAPI.infraestructure.repositories.RecipesRepository;
+import com.cookguide.database.shared.exception.ResourceNotFoundException;
 import com.cookguide.database.shared.exception.ValidationException;
 import com.cookguide.database.shared.model.dto.response.ApiResponse;
 import com.cookguide.database.shared.model.enums.Estatus;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +26,8 @@ public class RecipesServiceImpl implements RecipesService {
     private final RecipesRepository recipesRepository;
     private final ModelMapper modelMapper;
 
+    @Autowired
+    private RecipeIngredientsRepository recipeIngredientsRepository;
 
     public RecipesServiceImpl(RecipesRepository recipesRepository, ModelMapper modelMapper) {
         this.recipesRepository = recipesRepository;
@@ -71,6 +78,17 @@ public class RecipesServiceImpl implements RecipesService {
         }
     }
 
+    @Override
+    public ApiResponse<RecipesResponseDTO> getRecipeById(int id) {
+        Optional<Recipes> recipeOptional = recipesRepository.findById(id);
+        if (recipeOptional.isPresent()) {
+            RecipesResponseDTO responseDTO = modelMapper.map(recipeOptional.get(), RecipesResponseDTO.class);
+            return new ApiResponse<>("Recipe retrieved successfully", Estatus.SUCCESS, responseDTO);
+        } else {
+            return new ApiResponse<>("Recipe not found", Estatus.ERROR, null);
+        }
+    }
+
     void validateUniqueRecipes(RecipesRequestDTO recipesRequestDTO) {
         boolean exists = recipesRepository.existsByNameAndPreparationAndServingsAndTime(
                 recipesRequestDTO.getName(),
@@ -81,6 +99,24 @@ public class RecipesServiceImpl implements RecipesService {
 
         if (exists) {
             throw new ValidationException("Recipe with the same name, type, time, and ingredients already exists");
+        }
+    }
+
+    public List<RecipeIngredientDetailDTO> getRecipeIngredients(int recipeId) {
+        Optional<Recipes> recipeOptional = recipesRepository.findById(recipeId);
+        if (recipeOptional.isPresent()) {
+            Recipes recipe = recipeOptional.get();
+            List<RecipeIngredients> recipeIngredients = recipeIngredientsRepository.findByRecipe(recipe);
+
+            return recipeIngredients.stream()
+                    .map(ri -> new RecipeIngredientDetailDTO(
+                            ri.getRecipe().getUid(),
+                            ri.getIngredient().getUid(),
+                            ri.getAmount(),
+                            ri.getMeasure()))
+                    .collect(Collectors.toList());
+        } else {
+            throw new ResourceNotFoundException("Recipe not found for this id: " + recipeId);
         }
     }
 

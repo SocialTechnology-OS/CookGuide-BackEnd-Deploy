@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,5 +24,8 @@ public class Ingredients {
     @Column(name = "name", length = 50, nullable = false)
     private String name;
 
+    public int getUid() {
+        return uid;
+    }
 
 }

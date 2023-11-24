@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a04ef9d0-bbc4-462a-b731-9840cc5989ea" name="Changes" comment="" />
+    <list default="true" id="a04ef9d0-bbc4-462a-b731-9840cc5989ea" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/application/controllers/RecipesIngredientController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/application/services/impl/RecipeIngredientService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/domain/entities/Recipe_ingredient_id.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/domain/entities/Recipes_ingredients.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/infraestructure/repositories/RecipesIngredientsRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/domain/entities/Recipes.java" beforeDir="false" afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/domain/entities/Recipes.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,19 +31,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Trabajos/OpenSource/Backend/CookGuide-BackEnd&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "US001",
+    "last_opened_file_path": "C:/Users/Luis/Documents/GitHub/CookGuide-BackEnd",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="CookGuide-BackEnd" />
@@ -62,6 +73,7 @@
       <updated>1699720968762</updated>
       <workItem from="1699720969849" duration="333000" />
       <workItem from="1699721321288" duration="310000" />
+      <workItem from="1700801383555" duration="249000" />
     </task>
     <servers />
   </component>
