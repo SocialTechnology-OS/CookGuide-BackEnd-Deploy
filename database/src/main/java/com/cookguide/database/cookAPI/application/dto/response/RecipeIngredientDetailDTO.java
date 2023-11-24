@@ -22,5 +22,5 @@ public class RecipeIngredientDetailDTO {
         this.amount = amount;
         this.measure = measure;
     }
-    
+
 }

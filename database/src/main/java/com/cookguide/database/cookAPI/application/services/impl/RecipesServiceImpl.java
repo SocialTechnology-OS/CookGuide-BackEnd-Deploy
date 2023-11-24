@@ -38,11 +38,30 @@ public class RecipesServiceImpl implements RecipesService {
     public ApiResponse<List<RecipesResponseDTO>> getAllRecipes() {
         List<Recipes> recipesList = (List<Recipes>) recipesRepository.findAll();
         List<RecipesResponseDTO> recipesDTOList = recipesList.stream()
-                .map(entity -> modelMapper.map(entity, RecipesResponseDTO.class))
+                .map(recipe -> {
+                    RecipesResponseDTO dto = modelMapper.map(recipe, RecipesResponseDTO.class);
+                    List<RecipeIngredients> recipeIngredients = recipeIngredientsRepository.findByRecipe(recipe);
+                    List<String> ingredientDescriptions = recipeIngredients.stream()
+                            .map(ri -> ri.getIngredient().getName() + ", " + ri.getAmount() + ", " + ri.getMeasure())
+                            .collect(Collectors.toList());
+                    dto.setIngredients(ingredientDescriptions);
+                    return dto;
+                })
                 .collect(Collectors.toList());
 
         return new ApiResponse<>("All recipes fetched successfully", Estatus.SUCCESS, recipesDTOList);
     }
+
+    /*
+    @Override
+    public ApiResponse<List<RecipesResponseDTO>> getAllRecipes() {
+        List<Recipes> recipesList = (List<Recipes>) recipesRepository.findAll();
+        List<RecipesResponseDTO> recipesDTOList = recipesList.stream()
+                .map(entity -> modelMapper.map(entity, RecipesResponseDTO.class))
+                .collect(Collectors.toList());
+
+        return new ApiResponse<>("All recipes fetched successfully", Estatus.SUCCESS, recipesDTOList);
+    }*/
     @Override
     public ApiResponse<RecipesResponseDTO> createRecipes(RecipesRequestDTO recipesRequestDTO) {
         validateUniqueRecipes(recipesRequestDTO);
