@@ -27,4 +27,7 @@ public class RecipesRequestDTO {
 
     @NotBlank(message = "servings is mandatory")
     private String servings;
+
+    @NotBlank(message = "author is mandatory")
+    private int authorId;
 }

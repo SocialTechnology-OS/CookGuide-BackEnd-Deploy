@@ -4,8 +4,10 @@ import com.cookguide.database.cookAPI.application.dto.request.RecipesRequestDTO;
 import com.cookguide.database.cookAPI.application.dto.response.RecipeIngredientDetailDTO;
 import com.cookguide.database.cookAPI.application.dto.response.RecipesResponseDTO;
 import com.cookguide.database.cookAPI.application.services.RecipesService;
+import com.cookguide.database.cookAPI.domain.entities.Account;
 import com.cookguide.database.cookAPI.domain.entities.RecipeIngredients;
 import com.cookguide.database.cookAPI.domain.entities.Recipes;
+import com.cookguide.database.cookAPI.infraestructure.repositories.AccountRepository;
 import com.cookguide.database.cookAPI.infraestructure.repositories.RecipeIngredientsRepository;
 import com.cookguide.database.cookAPI.infraestructure.repositories.RecipesRepository;
 import com.cookguide.database.shared.exception.ResourceNotFoundException;
@@ -24,14 +26,18 @@ import java.util.stream.Collectors;
 public class RecipesServiceImpl implements RecipesService {
 
     private final RecipesRepository recipesRepository;
+
+    private final AccountRepository accountRepository;
+
     private final ModelMapper modelMapper;
 
     @Autowired
     private RecipeIngredientsRepository recipeIngredientsRepository;
 
-    public RecipesServiceImpl(RecipesRepository recipesRepository, ModelMapper modelMapper) {
+    public RecipesServiceImpl(RecipesRepository recipesRepository, ModelMapper modelMapper, AccountRepository accountRepository) {
         this.recipesRepository = recipesRepository;
         this.modelMapper = modelMapper;
+        this.accountRepository = accountRepository;
     }
 
     @Override
@@ -40,6 +46,7 @@ public class RecipesServiceImpl implements RecipesService {
         List<RecipesResponseDTO> recipesDTOList = recipesList.stream()
                 .map(recipe -> {
                     RecipesResponseDTO dto = modelMapper.map(recipe, RecipesResponseDTO.class);
+                    dto.setAuthorId(recipe.getAccount().getId());
                     List<RecipeIngredients> recipeIngredients = recipeIngredientsRepository.findByRecipe(recipe);
                     List<String> ingredientDescriptions = recipeIngredients.stream()
                             .map(ri -> ri.getIngredient().getName() + ", " + ri.getAmount() + ", " + ri.getMeasure())
@@ -52,25 +59,16 @@ public class RecipesServiceImpl implements RecipesService {
         return new ApiResponse<>("All recipes fetched successfully", Estatus.SUCCESS, recipesDTOList);
     }
 
-    /*
-    @Override
-    public ApiResponse<List<RecipesResponseDTO>> getAllRecipes() {
-        List<Recipes> recipesList = (List<Recipes>) recipesRepository.findAll();
-        List<RecipesResponseDTO> recipesDTOList = recipesList.stream()
-                .map(entity -> modelMapper.map(entity, RecipesResponseDTO.class))
-                .collect(Collectors.toList());
-
-        return new ApiResponse<>("All recipes fetched successfully", Estatus.SUCCESS, recipesDTOList);
-    }*/
     @Override
     public ApiResponse<RecipesResponseDTO> createRecipes(RecipesRequestDTO recipesRequestDTO) {
-        validateUniqueRecipes(recipesRequestDTO);
-        var recipe = modelMapper.map(recipesRequestDTO, Recipes.class);
+        Account author = accountRepository.findById(recipesRequestDTO.getAuthorId())
+                .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+        Recipes recipe = modelMapper.map(recipesRequestDTO, Recipes.class);
+        recipe.setAccount(author);
         recipesRepository.save(recipe);
 
         var response = modelMapper.map(recipe, RecipesResponseDTO.class);
-
-        return new ApiResponse<>("Sport event created successfully", Estatus.SUCCESS, response);
+        return new ApiResponse<>("Recipe created successfully", Estatus.SUCCESS, response);
     }
 
     @Override

@@ -30,4 +30,6 @@ public class RecipesResponseDTO {
     private String servings;
 
     private List<String> ingredients;
+
+    private int authorId;
 }

@@ -38,4 +38,8 @@ public class Recipes {
     public int getUid() {
         return uid;
     }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", nullable = false)
+    private Account account;
 }
