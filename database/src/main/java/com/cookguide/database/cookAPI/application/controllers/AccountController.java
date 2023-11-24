@@ -1,84 +1,55 @@
 package com.cookguide.database.cookAPI.application.controllers;
 
-import com.cookguide.database.shared.exception.ValidationException;
-import com.cookguide.database.cookAPI.domain.entities.Account;
-import com.cookguide.database.cookAPI.infraestructure.repositories.AccountRepository;
 
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cookguide.database.cookAPI.application.dto.request.AccountRequestDTO;
+import com.cookguide.database.cookAPI.application.dto.response.AccountResponseDTO;
+import com.cookguide.database.cookAPI.application.services.AccountService;
+import com.cookguide.database.shared.model.dto.response.ApiResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
-
+@Tag(name = "Account", description = "Account API")
 @RestController
-@RequestMapping("/api/login/v1")
+@RequestMapping("/api/v1/cookguide")
 public class AccountController {
-    @Autowired
-    private AccountRepository accountRepository;
 
-    @Transactional
+    private AccountService accountService;
+
+    public AccountController(AccountService accountService) {
+        this.accountService = accountService;
+    }
+
+    @Operation(summary = "Get all accounts")
+    @GetMapping("/accounts")
+    public ResponseEntity<ApiResponse<List<AccountResponseDTO>>> getAllAccounts() {
+        var res = accountService.getAllAccounts();
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Create a new account")
     @PostMapping("/accounts")
-    public ResponseEntity<Account> createAccount(@RequestBody Account account)
-    {
-        validateAccount(account);
-        Account savedAccount = accountRepository.save(account);
-        return ResponseEntity.ok(savedAccount);
-    }
-    @GetMapping("/accounts/{id}")
-    public ResponseEntity<Account> getAccountById(@PathVariable int id) {
-        Optional<Account> account = accountRepository.findById(id);
-        return account.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<ApiResponse<AccountResponseDTO>> createAccount(@RequestBody AccountRequestDTO accountRequestDTO) {
+        var res = accountService.createAccount(accountRequestDTO);
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/accounts/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable int id) {
-        if (accountRepository.existsById(id)) {
-            accountRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
+    @Operation(summary = "Update an existing account")
     @PutMapping("/accounts/{id}")
-    public ResponseEntity<Account> updateAccount(@PathVariable int id, @RequestBody Account updatedAccount) {
-        Optional<Account> existingAccount = accountRepository.findById(id);
-        if (existingAccount.isPresent()) {
-            // Cambio de Nombres, Dieta, Fecha de Cumpleaños y Numero
-            Account account = existingAccount.get();
-            account.setFirstName(updatedAccount.getFirstName());
-            account.setLastName(updatedAccount.getLastName());
-            account.setDiet(updatedAccount.getDiet());
-            account.setBirthday(updatedAccount.getBirthday());
-            account.setPhone(updatedAccount.getPhone());
-
-            // Ejemplo: account.setNombre(updatedAccount.getNombre());
-
-
-            Account savedAccount = accountRepository.save(account);
-            return ResponseEntity.ok(savedAccount);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ApiResponse<AccountResponseDTO>> updateAccount(@PathVariable int id, @RequestBody AccountRequestDTO accountRequestDTO) {
+        var res = accountService.updateAccount(id, accountRequestDTO);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
-
-
-    private void validateAccount(Account account){
-        String emailRegex = "^[A-Za-z0-9_-]+@(gmail\\.com|yahoo\\.com|outlook\\.com)$";
-
-        if (!account.getUserEmail().matches(emailRegex)) {
-            throw new ValidationException("Invalid Email or domain not allowed");
-        }
-        if (account.getFirstName().length() > 100){
-            throw new ValidationException("Maximun limit of characters");
-        }
-
+    @Operation(summary = "Delete an account")
+    @DeleteMapping("/accounts/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteAccount(@PathVariable int id) {
+        var res = accountService.deleteAccount(id);
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
-
-
-
 
 }

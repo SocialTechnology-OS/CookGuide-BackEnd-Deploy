@@ -20,7 +20,7 @@ public class Account {
 
     @Id
     @GeneratedValue( strategy = GenerationType.SEQUENCE)
-    private Long uid;
+    private int id;
 
     @Column( name = "firstName", length = 100, nullable = false)
     private String firstName;
@@ -28,14 +28,17 @@ public class Account {
     @Column( name = "lastName", length = 100, nullable = false)
     private String lastName;
 
-    @Column( name = "userEmail", length = 100, nullable = false)
-    private String userEmail;
+    @Column( name = "email", length = 100, nullable = false)
+    private String email;
 
-    @Column( name = "userPassword", length = 100, nullable = false)
-    private String userPassword;
+    @Column( name = "user", length = 100, nullable = false)
+    private String user;
 
-    @Column( name = "userType", nullable = false)
-    private boolean userType;
+    @Column( name = "password", length = 100, nullable = false)
+    private String password;
+
+    @Column( name = "type", nullable = false)
+    private String type;
 
     @Column(name = "birthday", nullable = false)
     private LocalDate birthday;
@@ -44,7 +47,7 @@ public class Account {
     private String phone;
 
     @Column(name = "DNI", nullable= false)
-    private int DNI;
+    private Long DNI;
 
     @Column(name = "gender", nullable = false)
     private String gender;
@@ -55,19 +58,10 @@ public class Account {
     @Column(name = "picture", nullable = false)
     private String picture;
 
+    @Column(name = "height", nullable = false)
+    private Float height;
 
-    /*
-    @OneToOne
-    @JoinColumn(name = "healthId", nullable = false
-    , foreignKey = @ForeignKey(name = "fkHealthID"))
-    @JsonProperty( access = JsonProperty.Access.WRITE_ONLY)
-    private Health_info healthInfo;
-
-    @OneToOne
-    @JoinColumn(name = "PreferenceId", nullable = false
-            , foreignKey = @ForeignKey(name = "fkPreferenceId"))
-    @JsonProperty( access = JsonProperty.Access.WRITE_ONLY)
-    private Preference preference;
-    */
+    @Column(name = "weight", nullable = false)
+    private Float weight;
 
 }
