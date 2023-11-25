@@ -20,4 +20,6 @@ public interface RecipesService {
     ApiResponse<RecipesResponseDTO> getRecipeById(int id);
 
     List<RecipeIngredientDetailDTO> getRecipeIngredients(int recipeId);
+
+    String getAuthorNameByRecipeId(int recipeId);
 }

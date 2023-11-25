@@ -101,9 +101,19 @@ public class RecipesServiceImpl implements RecipesService {
     @Override
     public ApiResponse<RecipesResponseDTO> getRecipeById(int id) {
         Optional<Recipes> recipeOptional = recipesRepository.findById(id);
+        Optional<RecipesResponseDTO> recipesDTO = recipeOptional.map(recipe -> {
+            RecipesResponseDTO dto = modelMapper.map(recipe, RecipesResponseDTO.class);
+            dto.setAuthorId(recipe.getAccount().getId());
+            List<RecipeIngredients> recipeIngredients = recipeIngredientsRepository.findByRecipe(recipe);
+            List<String> ingredientDescriptions = recipeIngredients.stream()
+                    .map(ri -> ri.getIngredient().getName() + ", " + ri.getAmount() + ", " + ri.getMeasure())
+                    .collect(Collectors.toList());
+            dto.setIngredients(ingredientDescriptions);
+            return dto;
+        });
         if (recipeOptional.isPresent()) {
             RecipesResponseDTO responseDTO = modelMapper.map(recipeOptional.get(), RecipesResponseDTO.class);
-            return new ApiResponse<>("Recipe retrieved successfully", Estatus.SUCCESS, responseDTO);
+            return new ApiResponse<>("Recipe retrieved successfully", Estatus.SUCCESS, recipesDTO.get());
         } else {
             return new ApiResponse<>("Recipe not found", Estatus.ERROR, null);
         }
@@ -150,6 +160,20 @@ public class RecipesServiceImpl implements RecipesService {
         if (servings < 1 || servings > 100) {
             throw new ValidationException("Servings must be between 1 and 100.");
         }
+    }
+
+    @Override
+    public String getAuthorNameByRecipeId(int recipeId) {
+        return recipesRepository.findById(recipeId)
+                .map(recipe -> {
+                    Account author = recipe.getAccount();
+                    if (author != null) {
+                        return author.getFirstName() + " " + author.getLastName();
+                    } else {
+                        return "Autor no encontrado";
+                    }
+                })
+                .orElse("Receta no encontrada");
     }
 
 }
