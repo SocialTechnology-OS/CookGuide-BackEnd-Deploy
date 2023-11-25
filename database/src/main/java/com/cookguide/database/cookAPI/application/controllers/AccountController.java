@@ -5,6 +5,7 @@ import com.cookguide.database.cookAPI.application.dto.request.AccountRequestDTO;
 import com.cookguide.database.cookAPI.application.dto.response.AccountResponseDTO;
 import com.cookguide.database.cookAPI.application.services.AccountService;
 import com.cookguide.database.shared.model.dto.response.ApiResponse;
+import com.cookguide.database.shared.model.enums.Estatus;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,13 @@ public class AccountController {
     public ResponseEntity<ApiResponse<List<AccountResponseDTO>>> getAllAccounts() {
         var res = accountService.getAllAccounts();
         return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @Operation(summary = "Get an account by ID")
+    @GetMapping("/accounts/{id}")
+    public ResponseEntity<ApiResponse<AccountResponseDTO>> getAccountById(@PathVariable("id") int id) {
+        ApiResponse<AccountResponseDTO> response = accountService.getAccountById(id);
+        return new ResponseEntity<>(response, response.getStatus() == Estatus.SUCCESS ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     @Operation(summary = "Create a new account")

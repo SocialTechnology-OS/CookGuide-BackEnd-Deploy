@@ -6,6 +6,7 @@ import com.cookguide.database.cookAPI.application.dto.response.RecipesResponseDT
 import com.cookguide.database.cookAPI.application.services.IngredientsService;
 import com.cookguide.database.cookAPI.domain.entities.Ingredients;
 import com.cookguide.database.cookAPI.infraestructure.repositories.IngredientRepository;
+import com.cookguide.database.shared.exception.ValidationException;
 import com.cookguide.database.shared.model.dto.response.ApiResponse;
 import com.cookguide.database.shared.model.enums.Estatus;
 import org.modelmapper.ModelMapper;
@@ -39,6 +40,7 @@ public class IngredientsServiceImpl implements IngredientsService {
 
     @Override
     public ApiResponse<IngredientsResponseDTO> createIngredient(IngredientsRequestDTO ingredientsRequestDTO) {
+        validateName(ingredientsRequestDTO.getName());
         var ingredient = modelMapper.map(ingredientsRequestDTO, Ingredients.class);
         ingredientRepository.save(ingredient);
 
@@ -71,4 +73,17 @@ public class IngredientsServiceImpl implements IngredientsService {
             return new ApiResponse<>("Ingredient not found", Estatus.ERROR, null);
         }
     }
+
+
+    @Override
+    public boolean isUniqueIngredient(String name) {
+        return !ingredientRepository.existsByName(name);
+    }
+
+    private void validateName(String name) {
+        if (!isUniqueIngredient(name)) {
+            throw new ValidationException("Ingredient name already exists");
+        }
+    }
+
 }

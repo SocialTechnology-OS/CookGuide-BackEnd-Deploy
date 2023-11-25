@@ -40,12 +40,27 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public ApiResponse<AccountResponseDTO> getAccountById(int id) {
+        Optional<Account> accountOptional = accountRepository.findById(id);
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            AccountResponseDTO responseDTO = modelMapper.map(account, AccountResponseDTO.class);
+            return new ApiResponse<>("Account fetched successfully", Estatus.SUCCESS, responseDTO);
+        } else {
+            return new ApiResponse<>("Account not found", Estatus.ERROR, null);
+        }
+    }
+    @Override
     public ApiResponse<AccountResponseDTO> createAccount(AccountRequestDTO accountRequestDTO) {
         validateEmail(accountRequestDTO.getEmail());
         validateDNI(accountRequestDTO.getDNI());
         validateAge(accountRequestDTO.getBirthday());
         validatePassword(accountRequestDTO.getPassword());
         validatePhoneNumber(accountRequestDTO.getPhone());
+        validateEmailDomain(accountRequestDTO.getEmail());
+        validateAccountType(accountRequestDTO.getType());
+        validateGender(accountRequestDTO.getGender());
+        validateDiet(accountRequestDTO.getDiet());
 
         var account = modelMapper.map(accountRequestDTO, Account.class);
         accountRepository.save(account);
@@ -109,6 +124,30 @@ public class AccountServiceImpl implements AccountService {
         }
     }
 
+    private void validateEmailDomain(String email) {
+        if (ALLOWED_EMAIL_DOMAINS.stream().noneMatch(email::endsWith)) {
+            throw new ValidationException("Email domain is not allowed.");
+        }
+    }
+
+    private void validateAccountType(String type) {
+        if (!ALLOWED_ACCOUNT_TYPES.contains(type.toLowerCase())) {
+            throw new ValidationException("Account type is invalid.");
+        }
+    }
+
+    private void validateGender(String gender) {
+        if (!ALLOWED_GENDERS.contains(gender.toLowerCase())) {
+            throw new ValidationException("Gender is invalid.");
+        }
+    }
+
+    private void validateDiet(String diet) {
+        if (!ALLOWED_DIETS.contains(diet.toLowerCase())) {
+            throw new ValidationException("Diet is invalid.");
+        }
+    }
+
     @Override
     public boolean isDniUnique(Long dni) {
         return !accountRepository.existsByDNI(dni);
@@ -136,5 +175,16 @@ public class AccountServiceImpl implements AccountService {
         String phoneRegex = "^\\+(?:[0-9] ?){6,14}[0-9]$";
         return phone.matches(phoneRegex);
     }
+
+    private static final List<String> ALLOWED_EMAIL_DOMAINS = List.of(
+            "@gmail.com", "@outlook.es", "@outlook.com", "@hotmail.com", "@yahoo.com"
+    );
+
+    private static final List<String> ALLOWED_ACCOUNT_TYPES = List.of("cocinero", "estudiante");
+
+    private static final List<String> ALLOWED_GENDERS = List.of("femenino", "masculino");
+
+    private static final List<String> ALLOWED_DIETS = List.of("omnivoro", "carnivoro", "herbivoro");
+
 
 }

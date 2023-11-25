@@ -15,4 +15,6 @@ public interface IngredientsService {
     ApiResponse<IngredientsResponseDTO> updateIngredient(int id, IngredientsRequestDTO ingredientsRequestDTO);
 
     ApiResponse<Void> deleteIngredient(int id);
+
+    boolean isUniqueIngredient(String name);
 }

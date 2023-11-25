@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface AccountService {
     ApiResponse<List<AccountResponseDTO>> getAllAccounts();
+    ApiResponse<AccountResponseDTO> getAccountById(int id);
     ApiResponse<AccountResponseDTO> createAccount(AccountRequestDTO accountRequestDTO);
     ApiResponse<AccountResponseDTO> updateAccount(int id, AccountRequestDTO accountRequestDTO);
     ApiResponse<Void> deleteAccount(int id);

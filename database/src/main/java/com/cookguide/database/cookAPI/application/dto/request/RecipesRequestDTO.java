@@ -23,10 +23,10 @@ public class RecipesRequestDTO {
     private String preparation;
 
     @NotBlank(message = "time is mandatory")
-    private String time;
+    private int time;
 
     @NotBlank(message = "servings is mandatory")
-    private String servings;
+    private int servings;
 
     @NotBlank(message = "author is mandatory")
     private int authorId;

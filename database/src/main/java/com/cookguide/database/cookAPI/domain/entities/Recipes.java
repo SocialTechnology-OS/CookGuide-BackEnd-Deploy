@@ -30,10 +30,10 @@ public class Recipes {
     private String preparation;
 
     @Column (name = "time", nullable = false)
-    private String time;
+    private int time;
 
     @Column (name = "servings", nullable = false)
-    private String servings;
+    private int servings;
 
     public int getUid() {
         return uid;

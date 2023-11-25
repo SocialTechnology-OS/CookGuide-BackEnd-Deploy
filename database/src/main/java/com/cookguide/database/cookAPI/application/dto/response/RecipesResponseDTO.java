@@ -25,9 +25,9 @@ public class RecipesResponseDTO {
 
     private String preparation;
 
-    private String time;
+    private int time;
 
-    private String servings;
+    private int servings;
 
     private List<String> ingredients;
 

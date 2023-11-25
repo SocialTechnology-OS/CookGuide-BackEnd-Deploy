@@ -61,6 +61,9 @@ public class RecipesServiceImpl implements RecipesService {
 
     @Override
     public ApiResponse<RecipesResponseDTO> createRecipes(RecipesRequestDTO recipesRequestDTO) {
+        validateTime(recipesRequestDTO.getTime());
+        validateServings(recipesRequestDTO.getServings());
+        validateUniqueRecipes(recipesRequestDTO);
         Account author = accountRepository.findById(recipesRequestDTO.getAuthorId())
                 .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
         Recipes recipe = modelMapper.map(recipesRequestDTO, Recipes.class);
@@ -134,6 +137,18 @@ public class RecipesServiceImpl implements RecipesService {
                     .collect(Collectors.toList());
         } else {
             throw new ResourceNotFoundException("Recipe not found for this id: " + recipeId);
+        }
+    }
+
+    private void validateTime(int time) {
+        if (time < 1 || time > 1000) {
+            throw new ValidationException("Time must be between 1 and 1000.");
+        }
+    }
+
+    private void validateServings(int servings) {
+        if (servings < 1 || servings > 100) {
+            throw new ValidationException("Servings must be between 1 and 100.");
         }
     }
 
