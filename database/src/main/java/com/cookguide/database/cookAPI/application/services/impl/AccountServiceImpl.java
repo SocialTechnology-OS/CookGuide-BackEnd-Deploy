@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -176,15 +178,15 @@ public class AccountServiceImpl implements AccountService {
         return phone.matches(phoneRegex);
     }
 
-    private static final List<String> ALLOWED_EMAIL_DOMAINS = List.of(
+    private static final List<String> ALLOWED_EMAIL_DOMAINS = Arrays.asList(
             "@gmail.com", "@outlook.es", "@outlook.com", "@hotmail.com", "@yahoo.com"
     );
 
-    private static final List<String> ALLOWED_ACCOUNT_TYPES = List.of("cocinero", "estudiante");
+    private static final List<String> ALLOWED_ACCOUNT_TYPES = Arrays.asList("cocinero", "estudiante");
 
-    private static final List<String> ALLOWED_GENDERS = List.of("femenino", "masculino");
+    private static final List<String> ALLOWED_GENDERS = Arrays.asList("femenino", "masculino");
 
-    private static final List<String> ALLOWED_DIETS = List.of("omnivoro", "carnivoro", "herbivoro");
+    private static final List<String> ALLOWED_DIETS = Arrays.asList("omnivoro", "carnivoro", "herbivoro");
 
 
 }

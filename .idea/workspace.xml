@@ -5,12 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a04ef9d0-bbc4-462a-b731-9840cc5989ea" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/application/controllers/RecipesIngredientController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/application/services/impl/RecipeIngredientService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/domain/entities/Recipe_ingredient_id.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/domain/entities/Recipes_ingredients.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/infraestructure/repositories/RecipesIngredientsRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/domain/entities/Recipes.java" beforeDir="false" afterPath="$PROJECT_DIR$/database/src/main/java/com/cookguide/database/cookAPI/domain/entities/Recipes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/database/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,8 +32,8 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "US001",
-    "last_opened_file_path": "C:/Users/Luis/Documents/GitHub/CookGuide-BackEnd",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "H:/Universidad/Ciclo VII/Open Source/TF1/GitHub/Project_Report/Backend-CookGuide/CookGuide-BackEnd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -62,6 +58,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="DatabaseApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="database" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.cookguide.database.DatabaseApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -74,6 +77,7 @@
       <workItem from="1699720969849" duration="333000" />
       <workItem from="1699721321288" duration="310000" />
       <workItem from="1700801383555" duration="249000" />
+      <workItem from="1700922103663" duration="485000" />
     </task>
     <servers />
   </component>
