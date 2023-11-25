@@ -67,7 +67,7 @@ public class RecipesController {
         return ResponseEntity.ok(ingredientDetails);
     }
 
-    @GetMapping("/{id}/author")
+    @GetMapping("/recipes/{id}/author")
     public ResponseEntity<String> getRecipeAuthorName(@PathVariable int id) {
         String authorName = recipesService.getAuthorNameByRecipeId(id);
         return ResponseEntity.ok(authorName);
