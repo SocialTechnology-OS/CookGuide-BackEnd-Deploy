@@ -82,7 +82,19 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
+
+			<!-- Plugin de Maven Compiler -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.11.0</version> <!-- Actualiza a la versión más reciente -->
+				<configuration>
+					<source>2.1</source>
+					<target>2.1</target>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
+
 
 </project>
