@@ -182,4 +182,28 @@ public class RecipesServiceImpl implements RecipesService {
                 .orElseThrow(() -> new ResourceNotFoundException("Receta no encontrada"));
     }
 
+    @Override
+    public ApiResponse<List<RecipesResponseDTO>> getRecipesByAccountId(int accountId) {
+        List<Recipes> recipesList = recipesRepository.findByAccount_Id(accountId);
+
+        if (recipesList.isEmpty()) {
+            return new ApiResponse<>("No recipes found for this account", Estatus.ERROR, null);
+        }
+
+        List<RecipesResponseDTO> recipesDTOList = recipesList.stream()
+                .map(recipe -> {
+                    RecipesResponseDTO dto = modelMapper.map(recipe, RecipesResponseDTO.class);
+                    dto.setAuthorId(recipe.getAccount().getId());
+                    List<RecipeIngredients> recipeIngredients = recipeIngredientsRepository.findByRecipe(recipe);
+                    List<String> ingredientDescriptions = recipeIngredients.stream()
+                            .map(ri -> ri.getIngredient().getName() + ", " + ri.getAmount() + ", " + ri.getMeasure())
+                            .collect(Collectors.toList());
+                    dto.setIngredients(ingredientDescriptions);
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+        return new ApiResponse<>("Recipes retrieved successfully", Estatus.SUCCESS, recipesDTOList);
+    }
+
 }

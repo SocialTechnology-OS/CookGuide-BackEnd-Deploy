@@ -22,7 +22,7 @@ public interface RecipesService {
 
     List<RecipeIngredientDetailDTO> getRecipeIngredients(int recipeId);
 
-
-
     List<AuthorDetailDTO> getAuthorDetailsByRecipeId(int recipeId);
+
+    ApiResponse<List<RecipesResponseDTO>> getRecipesByAccountId(int accountId);
 }

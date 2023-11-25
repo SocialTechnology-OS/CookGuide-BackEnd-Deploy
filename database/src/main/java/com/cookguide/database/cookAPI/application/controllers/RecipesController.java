@@ -75,4 +75,11 @@ public class RecipesController {
         return ResponseEntity.ok(authorDetails);
     }
 
+    @Operation(summary = "Get recipes by account")
+    @GetMapping("/recipes/author/{accountId}")
+    public ResponseEntity<ApiResponse<List<RecipesResponseDTO>>> getRecipesByAccount(@PathVariable("accountId") int accountId) {
+        ApiResponse<List<RecipesResponseDTO>> response = recipesService.getRecipesByAccountId(accountId);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }
