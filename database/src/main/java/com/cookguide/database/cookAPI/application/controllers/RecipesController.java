@@ -1,6 +1,7 @@
 package com.cookguide.database.cookAPI.application.controllers;
 
 import com.cookguide.database.cookAPI.application.dto.request.RecipesRequestDTO;
+import com.cookguide.database.cookAPI.application.dto.response.AuthorDetailDTO;
 import com.cookguide.database.cookAPI.application.dto.response.RecipeIngredientDetailDTO;
 import com.cookguide.database.cookAPI.application.dto.response.RecipesResponseDTO;
 import com.cookguide.database.cookAPI.application.services.RecipesService;
@@ -67,10 +68,11 @@ public class RecipesController {
         return ResponseEntity.ok(ingredientDetails);
     }
 
+    @Operation(summary = "Get author details for a recipe")
     @GetMapping("/recipes/{id}/author")
-    public ResponseEntity<String> getRecipeAuthorName(@PathVariable int id) {
-        String authorName = recipesService.getAuthorNameByRecipeId(id);
-        return ResponseEntity.ok(authorName);
+    public ResponseEntity<List<AuthorDetailDTO>> getRecipeAuthorDetails(@PathVariable("id") int recipeId) {
+        List<AuthorDetailDTO> authorDetails = recipesService.getAuthorDetailsByRecipeId(recipeId);
+        return ResponseEntity.ok(authorDetails);
     }
 
 }

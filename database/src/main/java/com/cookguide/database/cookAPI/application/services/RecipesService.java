@@ -1,6 +1,7 @@
 package com.cookguide.database.cookAPI.application.services;
 
 import com.cookguide.database.cookAPI.application.dto.request.RecipesRequestDTO;
+import com.cookguide.database.cookAPI.application.dto.response.AuthorDetailDTO;
 import com.cookguide.database.cookAPI.application.dto.response.RecipeIngredientDetailDTO;
 import com.cookguide.database.cookAPI.application.dto.response.RecipesResponseDTO;
 import com.cookguide.database.shared.model.dto.response.ApiResponse;
@@ -21,5 +22,7 @@ public interface RecipesService {
 
     List<RecipeIngredientDetailDTO> getRecipeIngredients(int recipeId);
 
-    String getAuthorNameByRecipeId(int recipeId);
+
+
+    List<AuthorDetailDTO> getAuthorDetailsByRecipeId(int recipeId);
 }

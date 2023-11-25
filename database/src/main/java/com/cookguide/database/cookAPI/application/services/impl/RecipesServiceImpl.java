@@ -1,6 +1,7 @@
 package com.cookguide.database.cookAPI.application.services.impl;
 
 import com.cookguide.database.cookAPI.application.dto.request.RecipesRequestDTO;
+import com.cookguide.database.cookAPI.application.dto.response.AuthorDetailDTO;
 import com.cookguide.database.cookAPI.application.dto.response.RecipeIngredientDetailDTO;
 import com.cookguide.database.cookAPI.application.dto.response.RecipesResponseDTO;
 import com.cookguide.database.cookAPI.application.services.RecipesService;
@@ -18,6 +19,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -163,17 +165,21 @@ public class RecipesServiceImpl implements RecipesService {
     }
 
     @Override
-    public String getAuthorNameByRecipeId(int recipeId) {
+    public List<AuthorDetailDTO> getAuthorDetailsByRecipeId(int recipeId) {
         return recipesRepository.findById(recipeId)
                 .map(recipe -> {
+                    List<AuthorDetailDTO> authorDetails = new ArrayList<>();
                     Account author = recipe.getAccount();
                     if (author != null) {
-                        return author.getFirstName() + " " + author.getLastName();
-                    } else {
-                        return "Autor no encontrado";
+                        AuthorDetailDTO detailDTO = new AuthorDetailDTO();
+                        detailDTO.setId(author.getId());
+                        detailDTO.setFirstName(author.getFirstName());
+                        detailDTO.setLastName(author.getLastName());
+                        authorDetails.add(detailDTO);
                     }
+                    return authorDetails;
                 })
-                .orElse("Receta no encontrada");
+                .orElseThrow(() -> new ResourceNotFoundException("Receta no encontrada"));
     }
 
 }
